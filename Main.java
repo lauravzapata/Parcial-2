@@ -7,15 +7,14 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private static final TechRepair techRepair =
-            new TechRepair("TechRepair", "Armenia, Quindío", "123456");
+    private static final TechRepair techRepair = new TechRepair("TechRepair", "Armenia, Quindío", "123456");
 
     public static void main(String[] args) {
         mostrarMenu();
     }
 
     public static void mostrarMenu() {
-        int opcion = -1;
+        int opcion = 0;
 
         do {
             String menu = """
@@ -68,7 +67,6 @@ public class Main {
                 opcion = 0;
                 continue;
             }
-            try {
                 opcion = Integer.parseInt(entrada);
                 switch (opcion) {
                     case 1: registrarCliente();
@@ -150,16 +148,8 @@ public class Main {
 
                     default: mensaje("Selecciona una opción válida.");
                 }
-
-            } catch (NumberFormatException e) {
-                mensaje("Debes ingresar un número válido.");
-            } catch (Exception e) {
-                mensaje("No se pudo completar la operación: " + e.getMessage());
-            }
-
         } while (opcion != 0);
     }
-
 
     private static String pedirTexto(String mensaje) {
         String texto = JOptionPane.showInputDialog(mensaje);
@@ -167,8 +157,6 @@ public class Main {
         if (texto == null) {
             return null;
         }
-
-        texto = texto.trim();
 
         if (texto.isEmpty()) {
             mensaje("Este campo no puede estar vacío.");
@@ -180,19 +168,21 @@ public class Main {
 
     private static int pedirEntero(String mensaje) {
         String texto = pedirTexto(mensaje);
-
         if (texto == null) {
-            return -1;
+            return 0;
         }
-
-        try {
-            return Integer.parseInt(texto);
-        } catch (NumberFormatException e) {
+        if (texto.length() == 0) {
             mensaje("Debes ingresar un número entero.");
-            return -1;
+            return 0;
         }
+        for (int i = 0; i < texto.length(); i++) {
+            if (texto.charAt(i) < '0' || texto.charAt(i) > '9') {
+                mensaje("Debes ingresar un número entero.");
+                return 0;
+            }
+        }
+        return Integer.parseInt(texto);
     }
-
     private static void mensaje(String texto) {
         JOptionPane.showMessageDialog(null, texto);
     }
